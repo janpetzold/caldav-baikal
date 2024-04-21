@@ -1,0 +1,40 @@
+apiVersion: 2019-12-01
+location: westeurope
+name: docker-baikal-az
+properties:
+  containers:
+    - name: docker-baikal-az
+      properties:
+        image: ckulka/baikal:nginx
+        resources:
+          requests:
+            cpu: 1.0
+            memoryInGb: 1
+        ports:
+          - port: 80
+        volumeMounts:
+          - name: config-volume
+            mountPath: /var/www/baikal/config
+          - name: db-volume
+            mountPath: /var/www/baikal/Specific/db
+        environmentVariables: []
+  osType: Linux
+  ipAddress:
+    type: Public
+    ports:
+    - protocol: tcp
+      port: 80
+    dnsNameLabel: janptd
+  volumes:
+    - name: config-volume
+      azureFile:
+        shareName: baikalconfig
+        storageAccountName: baikalstorage
+        storageAccountKey: STORAGE-ACCOUNT-KEY
+    - name: db-volume
+      azureFile:
+        shareName: baikaldb
+        storageAccountName: baikalstorage
+        storageAccountKey: STORAGE-ACCOUNT-KEY
+tags: {}
+type: Microsoft.ContainerInstance/containerGroups

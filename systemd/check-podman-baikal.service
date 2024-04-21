@@ -1,0 +1,12 @@
+[Unit]
+Description=Check Podman Baikal Status
+
+[Service]
+Type=oneshot
+
+# No root privileges
+User=jan
+Group=jan
+
+ExecStart=/bin/sh -c '/usr/bin/podman container inspect baikal --format "{{.State.Running}}" | grep -q true || /usr/bin/podman start baikal'
+

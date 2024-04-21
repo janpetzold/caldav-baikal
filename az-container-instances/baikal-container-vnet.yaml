@@ -1,0 +1,43 @@
+apiVersion: 2021-07-01
+location: westeurope
+name: docker-baikal-vnet
+properties:
+  containers:
+    - name: docker-baikal-vnet
+      properties:
+        image: ckulka/baikal:nginx
+        resources:
+          requests:
+            cpu: 1.0
+            memoryInGb: 1
+        ports:
+          - port: 80
+        volumeMounts:
+          - name: config-volume
+            mountPath: /var/www/baikal/config
+          - name: db-volume
+            mountPath: /var/www/baikal/Specific/db
+        environmentVariables: []
+  osType: Linux
+  ipAddress:
+    type: Private
+    ports:
+    - protocol: tcp
+      port: 80
+    #dnsNameLabel: janptd
+  subnetIds: 
+    - id: /subscriptions/ID/resourceGroups/caldav-baikal/providers/Microsoft.Network/virtualNetworks/baikal-vnet/subnets/default
+      name: default
+  volumes:
+    - name: config-volume
+      azureFile:
+        shareName: baikalconfig
+        storageAccountName: baikalstorage
+        storageAccountKey: STORAGE-ACCOUNT-KEY
+    - name: db-volume
+      azureFile:
+        shareName: baikaldb
+        storageAccountName: baikalstorage
+        storageAccountKey: STORAGE-ACCOUNT-KEY
+tags: {}
+type: Microsoft.ContainerInstance/containerGroups

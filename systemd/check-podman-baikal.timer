@@ -1,0 +1,10 @@
+[Unit]
+Description=Runs check if Baikal service is running every 2 minutes
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=2min
+Unit=check-podman-baikal.service
+
+[Install]
+WantedBy=timers.target
